@@ -1,0 +1,5 @@
+NAME="kids.sh"
+DESCRIPTION="Kids shell command call wrapper"
+EMAIL="valentin.lab@kalysto.org"
+AUTHOR="Valentin LAB"
+AUTHOR_EMAIL="$AUTHOR <$EMAIL>"
