@@ -2,13 +2,17 @@
 
 from __future__ import print_function
 
-
+import os
 import locale
 import textwrap
+import collections
 
 from subprocess import Popen, PIPE
 
 from kids.txt import indent
+
+
+ShellOutput = collections.namedtuple('ShellOutput', ["out", "err", "errlvl"])
 
 
 class ShellError(Exception):
@@ -32,9 +36,10 @@ def cmd(command, env=None):
               close_fds=True, env=env,
               universal_newlines=False)
     stdout, stderr = p.communicate()
-    return (stdout.decode(locale.getpreferredencoding()),
-            stderr.decode(locale.getpreferredencoding()),
-            p.returncode)
+    return ShellOutput(
+        stdout.decode(locale.getpreferredencoding()),
+        stderr.decode(locale.getpreferredencoding()),
+        p.returncode)
 
 
 def wrap(command, ignore_errlvls=[0], env=None, strip=True):
@@ -77,3 +82,23 @@ def wrap(command, ignore_errlvls=[0], env=None, strip=True):
                             indent(formatted, prefix="  ")),
                          errlvl=errlvl, command=command, out=out, err=err)
     return out.strip() if strip else out
+
+
+def swrap(command, **kwargs):
+    """Same as ``wrap(...)`` but strips the output."""
+
+    return wrap(command, **kwargs).strip()
+
+
+def set_env(**se_kwargs):
+
+    def decorator(f):
+
+        def _wrapped(*args, **kwargs):
+            kwargs["env"] = dict(kwargs.get("env") or os.environ)
+            for key, value in se_kwargs.items():
+                if key not in kwargs["env"]:
+                    kwargs["env"][key] = value
+            return f(*args, **kwargs)
+        return _wrapped
+    return decorator

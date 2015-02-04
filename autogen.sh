@@ -98,7 +98,7 @@ get_current_version() {
         echo "$version"
     else
         version=$(echo "$version" | compat_sed "$get_short_tag")
-        echo "${version}.1dev_r$(dev_version_tag)"
+        echo "${version}.dev$(dev_version_tag)"
     fi
 
 }
@@ -129,10 +129,10 @@ prepare_files() {
 ## LOAD CONFIG
 ##
 
-if [ -e .package ]; then
+if [ -e ./.package ]; then
     . ./.package
 else
-    echo "'./package' file is missing."
+    echo "'./.package' file is missing."
     exit 1
 fi
 
