@@ -6,7 +6,6 @@ import os
 
 from kids.test import Test
 from kids.cache import cache
-from .. import wrap as w, cmd, set_env
 
 
 class BaseShTest(Test):
@@ -18,9 +17,11 @@ class BaseShTest(Test):
     @cache
     @property
     def cmd(self):
+        from .. import cmd
         return set_env(**self.DEFAULT_ENV)(cmd)
 
     @cache
     @property
     def w(self):
+        from .. import w
         return set_env(**self.DEFAULT_ENV)(w)
