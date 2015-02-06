@@ -8,8 +8,7 @@ tests inheriting BaseShTest.
 """
 
 
-from . import BaseShTest
-from .. import ShellError
+from .. import ShellError, BaseShTest
 
 
 class WrapSimpleTest(BaseShTest):
