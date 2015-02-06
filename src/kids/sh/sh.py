@@ -66,6 +66,8 @@ def wrap(command, ignore_errlvls=[0], env=None, strip=True):
 
     if errlvl not in ignore_errlvls:
 
+        ## XXXvlab: shouldn't we include all this in the repr of ShellError
+        ## so we could only raise the ShellError(namedtuple) ?
         formatted = []
         if out:
             if out.endswith('\n'):
