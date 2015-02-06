@@ -2,6 +2,7 @@
 kids.sh
 =========================
 
+
 .. image:: http://img.shields.io/pypi/v/kids.sh.svg?style=flat
    :target: https://pypi.python.org/pypi/kids.sh/
    :alt: Latest PyPI version
@@ -18,12 +19,14 @@ kids.sh
    :target: https://coveralls.io/r/0k/kids.sh
    :alt: Test coverage
 
+
 ``kids.sh`` is a Python library providing helpers when calling shell
 commands thanks to python. It's part of 'Kids' (for Keep It Dead Simple)
 library.
 
+
 Maturity
---------
+========
 
 This is Alpha release. More a place to store common librairies. Will
 perhaps evolve into something more consistent.
@@ -32,7 +35,7 @@ It is, for now, a very humble package.
 
 
 Features
---------
+========
 
 using ``kids.sh``:
 
@@ -74,10 +77,13 @@ Usage
 =====
 
 
+More documentation is available in the code.
+
+
 Wrap
 ----
 
-if command doesn't fail, standard output is returned::
+If command doesn't fail, standard output is returned::
 
     >>> from __future__ import print_function
 
@@ -96,7 +102,6 @@ But if command fails, then a special ShellError exception is casted::
       | bar
 
 
-More documentation is available in the code.
 
 
 Contributing
