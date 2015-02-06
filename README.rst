@@ -102,6 +102,18 @@ But if command fails, then a special ShellError exception is casted::
       | bar
 
 
+cmd
+---
+
+If you would rather want to get all information from the command, you can
+use ``cmd``::
+
+    >>> from kids.sh import cmd
+
+    >>> cmd('test "$HELLO" && echo "foo" || { echo "bar" ; false ; }')
+    ShellOutput(out=...'bar\n', err=...'', errlvl=1)
+
+So, notice it doesn't cast any exception, but outputs a named tuple.
 
 
 Contributing
