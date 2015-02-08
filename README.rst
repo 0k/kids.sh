@@ -97,7 +97,9 @@ But if command fails, then a special ShellError exception is casted::
     >>> wrap('test "$HELLO" && echo "foo" || { echo "bar" ; false ; }')
     Traceback (most recent call last):
     ...
-    ShellError: Wrapped command 'test "$HELLO" && echo "foo" || { echo "bar" ; false ; }' exited with errorlevel 1.
+    ShellError: Wrapped command returned with unexpected errorlevel.
+      command: 'test "$HELLO" && echo "foo" || { echo "bar" ; false ; }'
+      errlvl: 1
       stdout:
       | bar
 

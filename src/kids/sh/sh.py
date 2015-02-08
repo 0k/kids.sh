@@ -17,12 +17,31 @@ ShellOutput = collections.namedtuple('ShellOutput', ["out", "err", "errlvl"])
 
 class ShellError(Exception):
 
-    def __init__(self, msg, errlvl=None, command=None, out=None, err=None):
-        self.errlvl = errlvl
+    def __init__(self, msg, command=None, env=None, outputs=None):
         self.command = command
-        self.out = out
-        self.err = err
-        super(ShellError, self).__init__(msg)
+        self.outputs = outputs
+        self.env = env
+        self.message = msg
+
+    def __str__(self):
+        out, err, errlvl = self.outputs
+        formatted = []
+        if "\n" in self.command:
+            formatted.append("command:\n%s" % indent(self.command, "| "))
+        else:
+            formatted.append("command: %r" % self.command)
+        formatted.append("errlvl: %d" % errlvl)
+        if out:
+            if out.endswith('\n'):
+                out = out[:-1]
+            formatted.append("stdout:\n%s" % indent(out, "| "))
+        if err:
+            if err.endswith('\n'):
+                err = err[:-1]
+            formatted.append("stderr:\n%s" % indent(err, "| "))
+        formatted = '\n'.join(formatted)
+
+        return "%s\n%s" % (self.message, indent(formatted, prefix="  "))
 
 
 def cmd(command, env=None):
@@ -47,12 +66,15 @@ def wrap(command, ignore_errlvls=[0], env=None, strip=True):
 
     Please note that it'll also cast an exception on unexpected errlvl::
 
-        >>> wrap('builtin lsdjflk') # doctest: +ELLIPSIS +IGNORE_EXCEPTION_DETAIL
+        >>> wrap('builtin lsdjflk')  # doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         ...
-        ShellError: Wrapped command '/tmp/lsdjflk' exited with errorlevel 127.
+        ShellError: Wrapped command returned with unexpected errorlevel.
+          command: 'builtin lsdjflk'
+          errlvl: 127
           stderr:
-          | /bin/sh: .../tmp/lsdjflkjf: not found
+          | /bin/sh: 1: builtin: not found
+
 
     The command is passed as-is to the underlying default shell, so you can use
     builtins, pipes and all the machinery available in your shell::
@@ -62,28 +84,13 @@ def wrap(command, ignore_errlvls=[0], env=None, strip=True):
 
     """
 
-    out, err, errlvl = cmd(command, env=env)
+    res = cmd(command, env=env)
 
-    if errlvl not in ignore_errlvls:
-
-        ## XXXvlab: shouldn't we include all this in the repr of ShellError
-        ## so we could only raise the ShellError(namedtuple) ?
-        formatted = []
-        if out:
-            if out.endswith('\n'):
-                out = out[:-1]
-            formatted.append("stdout:\n%s" % indent(out, "| "))
-        if err:
-            if err.endswith('\n'):
-                err = err[:-1]
-            formatted.append("stderr:\n%s" % indent(err, "| "))
-        formatted = '\n'.join(formatted)
-
-        raise ShellError("Wrapped command %r exited with errorlevel %d.\n%s"
-                         % (command, errlvl,
-                            indent(formatted, prefix="  ")),
-                         errlvl=errlvl, command=command, out=out, err=err)
-    return out.strip() if strip else out
+    if res.errlvl not in ignore_errlvls:
+        raise ShellError(
+            msg="Wrapped command returned with unexpected errorlevel.",
+            command=command, env=env, outputs=res)
+    return res.out.strip() if strip else res.out
 
 
 def swrap(command, **kwargs):

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 import os
 
-from .sh import wrap, cmd, ShellError, swrap, set_env
+from .sh import wrap, cmd, ShellError, ShellOutput, swrap, set_env
 
 
 from kids.test import Test
