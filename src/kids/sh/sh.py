@@ -104,10 +104,12 @@ def set_env(**se_kwargs):
     def decorator(f):
 
         def _wrapped(*args, **kwargs):
-            kwargs["env"] = dict(kwargs.get("env") or os.environ)
+            kenv = kwargs.get("env", {})
+            env = dict(kenv or os.environ)
             for key, value in se_kwargs.items():
-                if key not in kwargs["env"]:
-                    kwargs["env"][key] = value
+                if key not in kenv:
+                    env[key] = value
+            kwargs["env"] = env
             return f(*args, **kwargs)
         return _wrapped
     return decorator
