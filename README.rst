@@ -70,7 +70,7 @@ master or branch from github, you could also::
 
 Or even select a specific revision (branch/tag/commit)::
 
-    pip install git+https://github.com/0k/kids.sh/colour@master
+    pip install git+https://github.com/0k/kids.sh@master
 
 
 Usage
