@@ -7,10 +7,6 @@ kids.sh
    :target: https://pypi.python.org/pypi/kids.sh/
    :alt: Latest PyPI version
 
-.. image:: http://img.shields.io/pypi/dm/kids.sh.svg?style=flat
-   :target: https://pypi.python.org/pypi/kids.sh/
-   :alt: Number of PyPI downloads
-
 .. image:: http://img.shields.io/travis/0k/kids.sh/master.svg?style=flat
    :target: https://travis-ci.org/0k/kids.sh/
    :alt: Travis CI build status
@@ -92,7 +88,7 @@ If command doesn't fail, standard output is returned::
     bar
 
 
-But if command fails, then a special ShellError exception is cast::
+But if command fails, then a special ``ShellError`` exception is cast::
 
     >>> wrap('test "$HELLO" && echo "foo" || { echo "bar" ; false ; }')
     Traceback (most recent call last):
@@ -190,7 +186,7 @@ would show you how to deal with your issue.
 License
 =======
 
-Copyright (c) 2015 Valentin Lab.
+Copyright (c) 2018 Valentin Lab.
 
 Licensed under the `BSD License`_.
 
