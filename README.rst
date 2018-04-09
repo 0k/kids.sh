@@ -99,6 +99,19 @@ But if command fails, then a special ``ShellError`` exception is cast::
       stdout:
       | bar
 
+If you provide a list instead of a string, no shell will be used to
+interpret your command: the process and arguments will be sent
+directly to the system::
+
+    >>> wrap(["/bin/cat", "/tmp/should-not-exist-file-xxxx"])
+    Traceback (most recent call last):
+    ...
+    ShellError: Wrapped command returned with unexpected errorlevel.
+      command: ['/bin/cat', '/should-not-exist-file-xxxx']
+      errlvl: 1
+      stderr:
+      | /bin/cat: /tmp/should-not-exist-file-xxxx: No such file or directory
+
 Notice:
 
 - that a ``swrap(..)`` command provide you with a shortcut to
@@ -149,6 +162,12 @@ use ``cmd``::
     ShellOutput(out=...'bar\n', err=...'', errlvl=1)
 
 So, notice it doesn't cast any exception, but outputs a named tuple.
+
+``cmd(..)`` also support handling a list of arguments instead of a
+command string if you want to bypass shell interpretation::
+
+    >>> cmd(['/bin/cat', '/file-does-not-exist-xxxx'])
+    ShellOutput(out=...'', err=...'...', errlvl=1)
 
 
 Contributing

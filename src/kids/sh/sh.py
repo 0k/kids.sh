@@ -15,6 +15,17 @@ from kids.txt import indent
 ShellOutput = collections.namedtuple('ShellOutput', ["out", "err", "errlvl"])
 
 
+try:
+    basestring  # attempt to evaluate basestring
+
+    def isstr(s):
+        return isinstance(s, basestring)
+except NameError:
+
+    def isstr(s):
+        return isinstance(s, str)
+
+
 class ShellError(Exception):
 
     def __init__(self, msg, command=None, env=None, outputs=None):
@@ -50,7 +61,7 @@ def cmd(command, env=None):
     This command is synchronous.
 
     """
-    p = Popen(command, shell=True,
+    p = Popen(command, shell=isstr(command),
               stdin=PIPE, stdout=PIPE, stderr=PIPE,
               close_fds=True, env=env,
               universal_newlines=False)
