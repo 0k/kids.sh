@@ -104,12 +104,6 @@ def wrap(command, ignore_errlvls=[0], env=None, strip=True):
     return res.out.strip() if strip else res.out
 
 
-def swrap(command, **kwargs):
-    """Same as ``wrap(...)`` but strips the output."""
-
-    return wrap(command, **kwargs).strip()
-
-
 def set_env(**se_kwargs):
 
     def decorator(f):

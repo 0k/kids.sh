@@ -76,8 +76,8 @@ Usage
 More documentation is available in the code.
 
 
-wrap, swrap
------------
+wrap
+----
 
 If command doesn't fail, standard output is returned::
 
@@ -114,15 +114,18 @@ directly to the system::
 
 Notice:
 
-- that a ``swrap(..)`` command provide you with a shortcut to
-  strip output from whitespace.
+- that a ``wrap(..)`` command will strip output (remove whitespaces
+  and newlines from the beginning and the ending of the output). If
+  you don't want this to happen, you can provide ``strip=False``.
 
-    >>> from kids.sh import swrap
-    >>> print("[%s]" % swrap('echo "  foo   "'))
+    >>> from kids.sh import wrap
+    >>> print("[%s]" % wrap('echo "  foo   "'))
     [foo]
+    >>> print("[%s]" % wrap('echo "  foo   "', strip=False))
+    [  foo   ]
 
-- both ``wrap(..)`` and ``swrap(..)`` support nice exception message even
-  with multi-line content::
+- ``wrap(..)`` support nice exception message even when handling
+  multi-line content (typically used for shell scripting)::
 
     >>> from kids.sh import wrap
     >>> print(wrap('''
