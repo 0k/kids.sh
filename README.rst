@@ -80,8 +80,8 @@ Usage
 More documentation is available in the code.
 
 
-Wrap
-----
+wrap, swrap
+-----------
 
 If command doesn't fail, standard output is returned::
 
@@ -92,7 +92,7 @@ If command doesn't fail, standard output is returned::
     bar
 
 
-But if command fails, then a special ShellError exception is casted::
+But if command fails, then a special ShellError exception is cast::
 
     >>> wrap('test "$HELLO" && echo "foo" || { echo "bar" ; false ; }')
     Traceback (most recent call last):
@@ -102,6 +102,43 @@ But if command fails, then a special ShellError exception is casted::
       errlvl: 1
       stdout:
       | bar
+
+Notice:
+
+- that a ``swrap(..)`` command provide you with a shortcut to
+  strip output from whitespace.
+
+    >>> from kids.sh import swrap
+    >>> print("[%s]" % swrap('echo "  foo   "'))
+    [foo]
+
+- both ``wrap(..)`` and ``swrap(..)`` support nice exception message even
+  with multi-line content::
+
+    >>> from kids.sh import wrap
+    >>> print(wrap('''
+    ...    if [ "bar" ]; then
+    ...       echo "foo"
+    ...       exit 3
+    ...    else
+    ...       exit 4
+    ...    fi
+    ... '''))
+    Traceback (most recent call last):
+    ...
+    ShellError: Wrapped command returned with unexpected errorlevel.
+      command:
+      |
+      |    if [ "bar" ]; then
+      |       echo "foo"
+      |       exit 3
+      |    else
+      |       exit 4
+      |    fi
+      |
+      errlvl: 3
+      stdout:
+      | foo
 
 
 cmd
